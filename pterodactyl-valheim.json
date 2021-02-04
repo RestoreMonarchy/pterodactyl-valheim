@@ -8,12 +8,12 @@
     "author": "michaelcrow@restoremonarchy.com",
     "description": "Valheim Dedicated Server.",
     "image": "michaelcrow\/pterodactyl-valheim:latest",
-    "startup": ".\/start_headless_server.sh -nographics -batchmode -name TestServer -port {{SERVER_PORT}} -public  1 echo Server started",
+    "startup": ".\/start_server.sh",
     "config": {
         "files": "{}",
-        "startup": "{\r\n    \"done\": \"Loading level: 100%\",\r\n    \"userInteraction\": []\r\n}",
+        "startup": "{\r\n    \"done\": \"Server started\",\r\n    \"userInteraction\": []\r\n}",
         "logs": "{\r\n    \"custom\": true,\r\n    \"location\": \"latest.log\"\r\n}",
-        "stop": "shutdown"
+        "stop": "RETURN"
     },
     "scripts": {
         "installation": {
