@@ -9,9 +9,7 @@
     "author": "michaelcrow@restoremonarchy.com",
     "description": "Valheim Dedicated Server",
     "features": null,
-    "images": [
-        "michaelcrow\/pterodactyl-valheim:latest"
-    ],
+    "image": "michaelcrow\/pterodactyl-valheim:latest",
     "file_denylist": "",
     "startup": ".\/start_server.sh",
     "config": {
