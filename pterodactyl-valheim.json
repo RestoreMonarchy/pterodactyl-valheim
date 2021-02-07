@@ -1,13 +1,16 @@
 {
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
     "meta": {
-        "version": "PTDL_v1"
+        "version": "PTDL_v1",
+        "update_url": null
     },
-    "exported_at": "2019-07-01T12:01:31+08:00",
-    "name": "Valheim-Dedicated-Server",
+    "exported_at": "2021-02-07T15:38:21-05:00",
+    "name": "Valheim Dedicated Server",
     "author": "michaelcrow@restoremonarchy.com",
-    "description": "Valheim Dedicated Server.",
+    "description": "Valheim Dedicated Server",
+    "features": null,
     "image": "michaelcrow\/pterodactyl-valheim:latest",
+    "file_denylist": "",
     "startup": ".\/start_server.sh",
     "config": {
         "files": "{}",
@@ -17,7 +20,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "apt update\r\napt -y --no-install-recommends install curl libgdiplus lib32gcc1 ca-certificates\r\n\r\ncd \/tmp\r\ncurl -sSL -o steamcmd.tar.gz https:\/\/steamcdn-a.akamaihd.net\/client\/installer\/steamcmd_linux.tar.gz\r\n\r\nmkdir -p \/mnt\/server\/steam\r\ntar -xzvf steamcmd.tar.gz -C \/mnt\/server\/steam\r\ncd \/mnt\/server\/steam\r\n\r\nchown -R root:root \/mnt\r\n\r\nexport HOME=\/mnt\/server\r\n.\/steamcmd.sh +@sSteamCmdForcePlatformBitness 64 +login anonymous +force_install_dir \/mnt\/server +app_update 896660 validate +quit",
+            "script": "apt update\r\napt -y --no-install-recommends install curl libgdiplus lib32gcc1 ca-certificates\r\n\r\ncd \/tmp\r\ncurl -sSL -o steamcmd.tar.gz https:\/\/steamcdn-a.akamaihd.net\/client\/installer\/steamcmd_linux.tar.gz\r\n\r\nmkdir -p \/mnt\/server\/steam\r\ntar -xzvf steamcmd.tar.gz -C \/mnt\/server\/steam\r\ncd \/mnt\/server\/steam\r\n\r\nchown -R root:root \/mnt\r\n\r\nexport HOME=\/mnt\/server\r\n.\/steamcmd.sh +@sSteamCmdForcePlatformBitness 64 +login anonymous +force_install_dir \/mnt\/server +app_update 896660 validate +quit\r\n\r\ncat <<\"EOT\" > \/mnt\/server\/start_server.sh\r\nexport templdpath=$LD_LIBRARY_PATH\r\nexport LD_LIBRARY_PATH=.\/linux64:$LD_LIBRARY_PATH\r\nexport SteamAppId=892970\r\n\r\n# Tip: Make a local copy of this script to avoid it being overwritten by steam.\r\n# NOTE: Minimum password length is 5 characters & Password cant be in the server name.\r\n# NOTE: You need to make sure the ports 2456-2458 is being forwarded to your server through your local router & firewall.\r\n\r\n# STOP: DO NOT EDIT THIS LINE, GO TO THE \"Startup\" TAB AND MODIFY VARIABLES THERE\r\n.\/valheim_server.x86_64 -name \"${SERVER_NAME}\" -port 2456 -world \"${SERVER_WORLD_NAME}\" -password \"${SERVER_PASSWORD}\" -public ${SERVER_PUBLIC} > \/dev\/null &\r\n# STOP: DO NOT EDIT THIS LINE, GO TO THE \"Startup\" TAB AND MODIFY VARIABLES THERE\r\n\r\nexport LD_LIBRARY_PATH=$templdpath\r\n\r\necho \"Server started\"\r\necho \"\"\r\nread -p \"Press RETURN to stop server\"\r\necho 1 > server_exit.drp\r\n\r\necho \"Server exit signal set\"\r\necho \"You can now close this terminal\"\r\nEOT",
             "container": "ubuntu:latest",
             "entrypoint": "bash"
         }
@@ -28,9 +31,45 @@
             "description": "Input 1 to enable or 0 to disable",
             "env_variable": "GAME_AUTOUPDATE",
             "default_value": "1",
-            "user_viewable": 1,
-            "user_editable": 1,
+            "user_viewable": true,
+            "user_editable": true,
             "rules": "required|integer|between:0,1"
+        },
+        {
+            "name": "Server Name",
+            "description": "Name of the server as it should appear on Steam server browser",
+            "env_variable": "SERVER_NAME",
+            "default_value": "My server",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:50"
+        },
+        {
+            "name": "World Name",
+            "description": "Name of the world file to load \/ generate (exclude file extension). World can be found nested in the \/.config folder",
+            "env_variable": "SERVER_WORLD_NAME",
+            "default_value": "Dedicated",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:30"
+        },
+        {
+            "name": "Public server",
+            "description": "Should the server appear publicly on server browser",
+            "env_variable": "SERVER_PUBLIC",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|integer|between:0,1"
+        },
+        {
+            "name": "Server Password",
+            "description": "Password required for users to join",
+            "env_variable": "SERVER_PASSWORD",
+            "default_value": "secret",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:30"
         }
     ]
 }
